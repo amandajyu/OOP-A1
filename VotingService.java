@@ -2,53 +2,49 @@
 Amanda Chang
  */
 import java.util.ArrayList;
-
 public class VotingService implements VotingServiceInterface{
     //number of answer choices
     private int countCopy;
-    private boolean multiple;
     //each index of tally array corresponds to the total
     //number of votes for that choice
     private int[] tally = {0,0,0,0,0};
-        /*
-        configure the question and answer format
-         */
-        public void configure(boolean multiple, int choices){
-        this.multiple = multiple;
-        countCopy = choices;
-    }// end of configure()
 
-    /*
-    each time a student submits their final answer, add their answers
-    to the total results in the tally array
-     */
-    public void submit(ArrayList<Character> studentAnswer){
+    public void configure(MultipleChoice multipleChoice) {
+            countCopy = multipleChoice.getChoicesCount();
+    }// end of configure for multiple choice
+
+    public void configure(SingleChoice singleChoice) {
+        countCopy = singleChoice.getChoicesCount();
+    }
+
+    public void submit(SingleChoice singleChoice, CreateStudent student){
         //check that the student only submits 1 answer for single choice questions
-        if (!multiple && studentAnswer.size()>1){
-            System.out.println("Invalid Answer! Only submit 1 answer");
-        }
-        else {
-            if(studentAnswer.contains('A')) {
-                tally[0] = tally[0] + 1;
-            }
-            if (studentAnswer.contains('B')){
-                tally[1] = tally[1] + 1;
-            }
-            if (studentAnswer.contains('C')){
-                tally[2] = tally[2] + 1;
-            }
-            if (studentAnswer.contains('D')){
-                tally[3] = tally[3] + 1;
-            }
-            if (studentAnswer.contains('E')){
-                tally[4] = tally[4] + 1;
-            }
-        }
-    }//end of submit
+        singleChoice.studentCheck(student.getStudentAnswer());
+        tally(student);
+    }//end of submit for singleChoice
 
-    /*
-    display the results of the vote
-     */
+    public void submit(MultipleChoice multipleChoice, CreateStudent student) {
+        tally(student);
+    }
+
+    public void tally(CreateStudent student) {
+        if(student.getStudentAnswer().contains('A')) {
+            tally[0] = tally[0] + 1;
+        }
+        if (student.getStudentAnswer().contains('B')){
+            tally[1] = tally[1] + 1;
+        }
+        if (student.getStudentAnswer().contains('C')){
+            tally[2] = tally[2] + 1;
+        }
+        if (student.getStudentAnswer().contains('D')){
+            tally[3] = tally[3] + 1;
+        }
+        if (student.getStudentAnswer().contains('E')){
+            tally[4] = tally[4] + 1;
+        }
+    }
+
     public void display(){
         System.out.println("Results:");
         if (countCopy==2){

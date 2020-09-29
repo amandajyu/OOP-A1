@@ -1,9 +1,5 @@
 /*
 Amanda Chang
-
-Note: originally wanted a method here to check if the
-Question's answer key was valid but ran out of time to
-implement Question answer key into the program
  */
 
 public class MultipleChoice {

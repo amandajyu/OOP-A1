@@ -4,21 +4,35 @@ Amanda Chang
 import java.util.ArrayList;
 
 public interface VotingServiceInterface {
+
     /*
-    arguments: Boolean multiple determines if it's multiple or single choice
-    choices is the number of answer choices to show
-    answer is what the answer to the question is
+    configure the question and answer format for multiple choice
     */
-    void configure(boolean multiple, int choices);
+    void configure(MultipleChoice multipleChoice);
 
     /*
-    once students submit their final answer no more changes can be made.
-    The service then tallies the students' answers
+    configure the question and answer format for single choice
+    */
+    void configure(SingleChoice singleChoice);
+
+    /*
+    each time a student submits their final answer, call on tally
      */
-    void submit(ArrayList<Character> studentAnswer);
+    void submit(MultipleChoice multipleChoice, CreateStudent student);
 
     /*
-    method for displaying the result of the voting
+    each time a student submits their final answer
+    check that it's only 1 answer and call on tally
+     */
+    void submit(SingleChoice singleChoice, CreateStudent student);
+
+    /*
+    add student's answer to the total results
+     */
+    void tally(CreateStudent student);
+
+    /*
+    display the results of the vote
      */
     void display();
 }
