@@ -1,7 +1,10 @@
-import java.lang.reflect.Array;
+/*
+Amanda Chang
+ */
 import java.util.ArrayList;
 
 public class Student {
+    //unique id
     private String id;
     private ArrayList<Character> studentAnswer = new ArrayList<>();
 

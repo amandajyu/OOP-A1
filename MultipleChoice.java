@@ -1,29 +1,35 @@
-import java.util.ArrayList;
+/*
+Amanda Chang
+Note: originally made SingleChoice and MultipleChoice to check
+that the Question's answer was valid but ran out of time to
+implement Question answer into the program
+ */
 
 public class MultipleChoice {
-    //composition
+    //composition?
     private Question question;
 
+    /*
+    default constructor
+     */
     public MultipleChoice(){
         this.question = new Question();
     }
-//    public MultipleChoice(int choices, ArrayList<String> answer){
+
+    /*
+    constructor for creating a multiple choice question
+    with a specified number of choices
+     */
     public MultipleChoice(int choices){
         this.question = new Question();
         question.setChoicesCount(choices);
-        //check that the answer is a valid size
+        //check that the answer is a valid size, if not throw exception
 //        if(answer.size()>=1 && answer.size()<=choices){
 ////            question.setAnswerKey(answer);
 //        }
     }
-//
-//    public ArrayList<String> getAnswerKey() {
-////        return question.getAnswerKey();
-//    }
 
     public int getChoicesCount() {
         return question.getChoicesCount();
     }
-
-    //TODO: throw and exception
 } //end of MultipleChoice

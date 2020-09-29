@@ -1,3 +1,6 @@
+/*
+Amanda Chang
+ */
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.UUID;
@@ -9,8 +12,6 @@ public class SimulationDriver {
         boolean multiple=false;
         //number of answer choices user wants
         int choices;
-//        ArrayList<String> answer = new ArrayList<String>();
-        VotingService votingService = new VotingService();
         Random random = new Random();
         //use random to decide if question is multiple or single answer, 0-1
         int questionType = random.nextInt(2);
@@ -18,59 +19,41 @@ public class SimulationDriver {
         String choiceLetters = "";
         //how may students there are
         int studentCount;
-        CreateStudent student;
-        String uniqueID;
-        ArrayList<Character> tempAnswer = new ArrayList<>();
-        //how many answers student will submit for multiple choice
+        //how many answers the student will submit for multiple choice
         int answerCount;
+        //initialize unique id for student
+        String uniqueID;
+        //possibleAnswer used to prevent repeats by the random generator
         char possibleAnswer;
+        VotingService votingService = new VotingService();
+        CreateStudent student;
+        //temporary array where student can select answers
+        //before submitting their final answer
+        ArrayList<Character> tempAnswer = new ArrayList<>();
 
+        MultipleChoice multipleChoice;
+        SingleChoice singleChoice;
 
-//        multiple=false;
-//        choices = 2;
-//        //answer is A
-//        answer.add("A");
-//        votingService.configure(multiple, choices, answer);
-//
-//        ArrayList<String> studentAnswer = new ArrayList<>();
-//        studentAnswer.add("A");
-//        CreateStudent student1 = new CreateStudent("student1", studentAnswer);
-//        votingService.submit(student1.getStudentAnswer());
-//
-//        studentAnswer.clear();
-//        studentAnswer.add("B");
-//        CreateStudent student2 = new CreateStudent("student2", studentAnswer);
-//        votingService.submit(student2.getStudentAnswer());
-//
-//        System.out.println(student1.getStudentAnswer());
-//        System.out.println(student2.getStudentAnswer());
-//        votingService.display();
-
-
-
-//        //students will have a temp to make changes to their a
-//        ArrayList<String> tempAnswer = new ArrayList<>();
-//
-//        Student student1 = new Student();
-//        student1.setId("student1");
-
-
-        //TODO: use multiple, choices, and answer to configure question object
-//        System.out.println("Single choice lets students submit only one answer.\n"
-//                + "Multiple choice lets students submit multiple answers.");
+        System.out.println("\nVoting Simulator!\n\n"
+            + "The question type, answer configuration (number of answer choices),\n" +
+                "number of students, and student answers will all be randomly generated.\n");
 
         if (questionType==0) {
             multiple = true;
             System.out.println("Type: Multiple Choice");
+            //randomly choose max number of answer choices from 2-5
+            choices = random.nextInt(4)+2;
+            multipleChoice = new MultipleChoice(choices);
+            System.out.println("The number of available choices is: " + multipleChoice.getChoicesCount());
         }
         else{
             multiple = false;
             System.out.println("Type: Single Choice");
+            //randomly choose max number of answer choices from 2-5
+            choices = random.nextInt(4)+2;
+            singleChoice = new SingleChoice(choices);
+            System.out.println("The number of available choices is: " + singleChoice.getChoicesCount());
         }
-
-        //randomly choose max number of answer choices from 2-5
-        choices = random.nextInt(4)+2;
-        System.out.println("The number of available choices is: " + choices);
 
         //configure the question and answer
         votingService.configure(multiple, choices);
@@ -88,11 +71,6 @@ public class SimulationDriver {
         if (choices==5){
             choiceLetters = "ABCDE";
         }
-
-
-
-
-//        String tempName;
 
         //randomly decide how many students there are from 10 to 50
         studentCount = random.nextInt(41)+10;
@@ -124,7 +102,6 @@ public class SimulationDriver {
         else if (questionType==1){
             //for loop for generating each student and their answer
             for (int i = 0; i<studentCount; i++){
-//                tempName = String.format("student%d",i-9);
                 uniqueID = UUID.randomUUID().toString();
                 //CreateStudent object with unique ID
                 student = new CreateStudent(uniqueID);
@@ -132,7 +109,6 @@ public class SimulationDriver {
                 tempAnswer.add(choiceLetters.charAt(random.nextInt(choiceLetters.length())));
                 student.setStudentAnswer(tempAnswer);
                 //submit the student's answer to VotingService
-//                System.out.println("student answer" + student.getStudentAnswer());
                 votingService.submit(student.getStudentAnswer());
                 tempAnswer.clear();
             }
@@ -141,11 +117,3 @@ public class SimulationDriver {
         votingService.display();
     }// end of main
 }// end of SimulationDriver
-
-/*
-NOTE: instead of array list what if i used a string and parsed it and only when
-checking answer i make it into an array list?
-
-instead of using tempAnswer what if I made an array of the student objects and have a loop where i got through the array
-of students and submit ea of their answers
- */
