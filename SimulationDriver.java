@@ -31,8 +31,8 @@ public class SimulationDriver {
         //before submitting their final answer
         ArrayList<Character> tempAnswer = new ArrayList<>();
 
-        MultipleChoice multipleChoice;
         SingleChoice singleChoice;
+        MultipleChoice multipleChoice;
 
         System.out.println("\nVoting Simulator!\n\n"
             + "The question type, answer configuration (number of answer choices),\n" +
@@ -41,19 +41,15 @@ public class SimulationDriver {
         if (questionType==0) {
             multiple = true;
             System.out.println("Type: Multiple Choice");
-            //randomly choose max number of answer choices from 2-5
-            choices = random.nextInt(4)+2;
-            multipleChoice = new MultipleChoice(choices);
-            System.out.println("The number of available choices is: " + multipleChoice.getChoicesCount());
         }
         else{
             multiple = false;
             System.out.println("Type: Single Choice");
-            //randomly choose max number of answer choices from 2-5
-            choices = random.nextInt(4)+2;
-            singleChoice = new SingleChoice(choices);
-            System.out.println("The number of available choices is: " + singleChoice.getChoicesCount());
         }
+
+        //randomly choose max number of answer choices from 2-5
+        choices = random.nextInt(4)+2;
+        System.out.println("The number of available choices is: " + choices);
 
         //configure the question and answer
         votingService.configure(multiple, choices);
@@ -78,13 +74,14 @@ public class SimulationDriver {
 
         //if it's multiple then students can submit multiple answers
         if (questionType==0){
+            multipleChoice = new MultipleChoice(choices);
             //for loop for generating each student and their answer
             for (int i = 0; i<studentCount; i++){
                 uniqueID = UUID.randomUUID().toString();
                 //CreateStudent object with unique ID
                 student = new CreateStudent(uniqueID);
                 //randomly decide how many answers this student will input
-                answerCount = random.nextInt(choices)+1;
+                answerCount = random.nextInt(multipleChoice.getChoicesCount())+1;
                 for (int j = 0; j < answerCount; j++){
                     //add the random letter if the answer has not chosen it yet
                     possibleAnswer = choiceLetters.charAt(random.nextInt(choiceLetters.length()));
@@ -100,6 +97,7 @@ public class SimulationDriver {
         }
         //if it's single then students can submit only one answer
         else if (questionType==1){
+            singleChoice = new SingleChoice(choices);
             //for loop for generating each student and their answer
             for (int i = 0; i<studentCount; i++){
                 uniqueID = UUID.randomUUID().toString();
@@ -108,6 +106,8 @@ public class SimulationDriver {
                 //randomly decide student's answer
                 tempAnswer.add(choiceLetters.charAt(random.nextInt(choiceLetters.length())));
                 student.setStudentAnswer(tempAnswer);
+                //check that the student selected only 1 answer
+                singleChoice.studentCheck(tempAnswer);
                 //submit the student's answer to VotingService
                 votingService.submit(student.getStudentAnswer());
                 tempAnswer.clear();

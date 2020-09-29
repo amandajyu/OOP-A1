@@ -1,9 +1,13 @@
 /*
 Amanda Chang
-Note: originally made SingleChoice and MultipleChoice to check
-that the Question's answer was valid but ran out of time to
-implement Question answer into the program
+
+Note: originally wanted a method here to check if the
+Question's answer key was valid but ran out of time to
+implement Question answer key into the program
  */
+
+import java.util.ArrayList;
+
 public class SingleChoice {
     //composition?
     private Question question;
@@ -22,13 +26,16 @@ public class SingleChoice {
     public SingleChoice(int choices){
     this.question = new Question();
         question.setChoicesCount(choices);
-        //check that the answer is a valid size, if not throw exception
-//        if(answer.size()==1){
-//            question.setAnswerKey(answer);
-//        }
     }
 
     public int getChoicesCount() {
         return question.getChoicesCount();
+    }
+
+    public void studentCheck(ArrayList<Character> studentSubmission){
+        if(studentSubmission.size()!=1){
+            System.out.println("You can only submit 1 answer!");
+            //should throw an exception but simulator won't run into this error
+        }
     }
 }// end of SingleChoice
